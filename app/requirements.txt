@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy       # If using an SQL database
+databases        # For async database support
+python-dotenv    # To load environment variables
