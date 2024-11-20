@@ -27,8 +27,8 @@ def allowed_file(filename: str) -> bool:
 
 
 # Function to save file and extract metadata
-async def process_file_and_extract_metadata(file: UploadFile, operation: OperationEnum):
-    logger.info(f"process_file_and_extract_metadata: file name:{file.filename} , operation: {operation}")
+async def process_file_and_extract_metadata(file: UploadFile, operation: OperationEnum,page_size: str):
+    logger.info(f"process_file_and_extract_metadata: file name:{file.filename} , operation: {operation}, page size: {page_size}")
 
     if not allowed_file(file.filename):
         raise HTTPException(status_code=400, detail="Invalid file type")
@@ -45,7 +45,7 @@ async def process_file_and_extract_metadata(file: UploadFile, operation: Operati
         metadata = await get_metadata(file_path)
         logger.info(f"Metadata extracted: {metadata}")
 
-        await process_based_on_operation(operation,file_path)
+        await process_based_on_operation(operation,file_path,page_size)
 
         return metadata
 
@@ -66,12 +66,12 @@ async def get_metadata(file_path):
     metadata = document_metadata.get_metadata()
     return metadata
 
-async def process_based_on_operation(operation,file_path):
+async def process_based_on_operation(operation,file_path,page_size):
     logger.info(f"process_based_on_operation: {operation}, file: {file_path}")
     if operation == OperationEnum.only_pdf:
         #output_file_path = os.path.join("uploadsNew", secure_filename(file.filename))
         output_file_path = "uploadsNew"
-        await convert_image_to_pdf_fpf(file_path,output_file_path)
+        await convert_image_to_pdf_fpf(file_path,output_file_path,page_size)
         logger.info(f"process_based_on_operation generating PDF only: {operation}")
 
 

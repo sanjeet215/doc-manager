@@ -13,10 +13,10 @@ router = APIRouter()
 
 
 @router.post("/document/metadata", response_model=DocumentMetadataResponse)
-async def get_document_metadata(file: UploadFile = File(...), operation: Optional[OperationEnum] = Form(None)):
+async def get_document_metadata(file: UploadFile = File(...), operation: Optional[OperationEnum] = Form(None),page_size: Optional[str] = Form(None)):
     try:
-        logger.info(f"get_document_metadata request: {operation}")
-        metadata = await process_file_and_extract_metadata(file,operation)
+        logger.info(f"get_document_metadata request: {operation}, page size: {page_size}")
+        metadata = await process_file_and_extract_metadata(file,operation,page_size)
         return DocumentMetadataResponse(**metadata)
     except HTTPException as e:
         raise e
